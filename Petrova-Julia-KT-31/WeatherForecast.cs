@@ -1,4 +1,4 @@
-namespace PetrovaJuliaKt_31_22
+namespace Petrova_Julia_KT_31
 {
     public class WeatherForecast
     {

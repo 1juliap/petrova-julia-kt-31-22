@@ -1,0 +1,6 @@
+@Petrova_Julia_KT_31_HostAddress = http://localhost:5005
+
+GET {{Petrova_Julia_KT_31_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
