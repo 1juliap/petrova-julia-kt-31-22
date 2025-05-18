@@ -6,10 +6,5 @@ namespace Petrova_Julia_KT_31.Models
     {
         public int  DepartmentId { get; set; }
         public string Name { get; set; }
-
-        public bool IsValidDepartmentName()
-        {
-            return Regex.IsMatch(Name, @"\D*");
-        }
     }
 }

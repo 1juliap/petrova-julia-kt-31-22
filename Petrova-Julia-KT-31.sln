@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petrova-Julia-KT-31", "Petrova-Julia-KT-31\Petrova-Julia-KT-31.csproj", "{DBAA5473-6659-456F-8633-0F3D214F7C1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petrova-Julia-KT-31.Test", "Petrova-Julia-KT-31.Test\Petrova-Julia-KT-31.Test.csproj", "{6EDE17AE-86FE-444F-B944-1C4F41103264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DBAA5473-6659-456F-8633-0F3D214F7C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBAA5473-6659-456F-8633-0F3D214F7C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBAA5473-6659-456F-8633-0F3D214F7C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDE17AE-86FE-444F-B944-1C4F41103264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDE17AE-86FE-444F-B944-1C4F41103264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDE17AE-86FE-444F-B944-1C4F41103264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDE17AE-86FE-444F-B944-1C4F41103264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,5 +19,12 @@
         public int? WorkloadId { get; set; }
         public Workload Workload { get; set; }
 
+        public bool HasFullName()
+        {
+            return !string.IsNullOrWhiteSpace(FirstName)
+                && !string.IsNullOrWhiteSpace(LastName)
+                && !string.IsNullOrWhiteSpace(MiddleName);
+        }
+
     }
 }
