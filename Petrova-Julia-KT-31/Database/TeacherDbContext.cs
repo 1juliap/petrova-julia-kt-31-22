@@ -7,7 +7,7 @@ namespace Petrova_Julia_KT_31.Database
     public class TeacherDbContext : DbContext
     {
         DbSet<Teacher> Teachers { get; set; }
-        DbSet<Discipline> Disciplines { get; set; }
+        public DbSet<Discipline> Disciplines { get; set; }
         DbSet<AcademicDegree> AcademicDegrees { get; set; }
         DbSet<Department> Departments { get; set; }
         DbSet<Staff> Staffers { get; set; }

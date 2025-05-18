@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Petrova_Julia_KT_31.Models;
+using Petrova_Julia_KT_31.Database.Helpers;
 
 namespace Petrova_Julia_KT_31.Database.Configurations
 {
@@ -10,25 +11,23 @@ namespace Petrova_Julia_KT_31.Database.Configurations
 
         public void Configure(EntityTypeBuilder<AcademicDegree> builder)
         {
-            builder.HasKey(p => p.AcademicDegreeId)
-                   .HasName($"pk_{TableName}_academic_degree_id");
+            builder
+                .HasKey(ad => ad.AcademicDegreeId)
+                .HasName($"pk_{TableName}_academic_degree_id");
 
-            builder.Property(p => p.AcademicDegreeId)
-                   .ValueGeneratedOnAdd();
+            builder.Property(ad => ad.AcademicDegreeId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("academic_degree_id")
+                .HasComment("Идентификатор академической степени");
 
-            builder.Property(p => p.Name)
-                   .IsRequired()
-                   .HasColumnName("c_academic_degree_name")
-                   .HasColumnType("nvarchar")
-                   .HasMaxLength(200)
-                   .HasComment("Название ученой степени (Кандидат наук, Доктор наук)");
+            builder.Property(ad => ad.Name)
+                .IsRequired()
+                .HasColumnName("c_academic_degree_name")
+                .HasColumnType(ColumnType.String).HasMaxLength(100);
 
-            // Связь "один ко многим" - одна степень, много преподавателей
-            builder.HasMany(ad => ad.Teachers)
-                   .WithOne(t => t.AcademicDegree)
-                   .HasForeignKey(t => t.AcademicDegreeId)
-                   .HasConstraintName($"fk_{TableName}_teacher_id");
+            builder.ToTable(TableName);
         }
     }
-
 }
+
+

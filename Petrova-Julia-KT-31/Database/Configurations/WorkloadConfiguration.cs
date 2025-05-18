@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Petrova_Julia_KT_31.Models;
+using Petrova_Julia_KT_31.Database.Helpers;
 
 namespace Petrova_Julia_KT_31.Database.Configurations
 {
@@ -10,23 +11,22 @@ namespace Petrova_Julia_KT_31.Database.Configurations
 
         public void Configure(EntityTypeBuilder<Workload> builder)
         {
-            builder.HasKey(p => p.WorkloadId)
-                   .HasName($"pk_{TableName}_workload_id");
+            builder
+                .HasKey(t => t.WorkloadId)
+                .HasName($"pk_{TableName}_workload_id");
 
-            builder.Property(p => p.WorkloadId)
-                   .ValueGeneratedOnAdd();
+            builder.Property(t => t.WorkloadId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("workload_id")
+                .HasComment("Идентификатор нагрузки на преподавателя");
 
-            builder.Property(p => p.Hours)
-                   .IsRequired()
-                   .HasColumnName("c_workload_hours")
-                   .HasColumnType("int")
-                   .HasComment("Количество часов нагрузки по дисциплине");
+            builder.Property(t => t.Hours)
+                .IsRequired()
+                .HasColumnName("c_hours")
+                .HasColumnType(ColumnType.Int)
+                .HasComment("Количество часов");
 
-            // Внешний ключ - дисциплина
-            builder.HasOne(w => w.Discipline)
-                   .WithMany(d => d.Workloads)
-                   .HasForeignKey(w => w.DisciplineId)
-                   .HasConstraintName($"fk_{TableName}_discipline_id");
+            builder.ToTable(TableName);
         }
     }
 

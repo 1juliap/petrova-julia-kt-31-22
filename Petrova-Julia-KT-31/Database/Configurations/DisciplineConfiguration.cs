@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Petrova_Julia_KT_31.Models;
+using Petrova_Julia_KT_31.Database.Helpers;
 
 namespace Petrova_Julia_KT_31.Database.Configurations
 {
@@ -10,30 +11,38 @@ namespace Petrova_Julia_KT_31.Database.Configurations
 
         public void Configure(EntityTypeBuilder<Discipline> builder)
         {
-            builder.HasKey(p => p.DisciplineId)
-                   .HasName($"pk_{TableName}_discipline_id");
+            builder
+                .HasKey(d => d.DisciplineId)
+                .HasName($"pk_{TableName}_discipline_id");
 
-            builder.Property(p => p.DisciplineId)
-                   .ValueGeneratedOnAdd();
+            builder.Property(d => d.DisciplineId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("discipline_id")
+                .HasComment("Идентификатор дисциплины");
 
-            builder.Property(p => p.Name)
-                   .IsRequired()
-                   .HasColumnName("c_discipline_name")
-                   .HasColumnType("nvarchar")
-                   .HasMaxLength(200)
-                   .HasComment("Название дисциплины");
+            builder.Property(d => d.Name)
+                .IsRequired()
+                .HasColumnName("c_discipline_name")
+                .HasColumnType(ColumnType.String).HasMaxLength(100)
+                .HasComment("Название дисциплины");
 
-            // Внешний ключ - преподаватель, ведущий дисциплину
-            builder.HasOne(d => d.Teacher)
-                   .WithMany(t => t.Disciplines)
-                   .HasForeignKey(d => d.TeacherId)
-                   .HasConstraintName($"fk_{TableName}_teacher_id");
+            builder.Property(p => p.TeacherId)
+                .HasColumnName("teacher_id")
+                .IsRequired(false)
+                .HasComment("Идентификатор преподавателя");
 
-            // Связь "один ко многим" - нагрузка в часах
-            builder.HasMany(d => d.Workloads)
-                   .WithOne(w => w.Discipline)
-                   .HasForeignKey(w => w.DisciplineId)
-                   .HasConstraintName($"fk_{TableName}_workload_id");
+            builder.HasOne(p => p.Teacher)
+                .WithMany()
+                .HasForeignKey(p => p.TeacherId)
+                .HasConstraintName("fk_teacher_id")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(p => p.TeacherId, $"idx_{TableName}_fk_teacher_id");
+
+            builder.Navigation(p => p.Teacher)
+                .AutoInclude();
+
+            builder.ToTable(TableName);
         }
     }
 

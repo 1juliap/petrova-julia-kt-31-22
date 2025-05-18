@@ -11,7 +11,7 @@ using Petrova_Julia_KT_31.Database;
 namespace Petrova_Julia_KT_31.Migrations
 {
     [DbContext(typeof(TeacherDbContext))]
-    [Migration("20250303122707_CreateDatabase")]
+    [Migration("20250425203031_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace Petrova_Julia_KT_31.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -28,21 +28,22 @@ namespace Petrova_Julia_KT_31.Migrations
                 {
                     b.Property<int>("AcademicDegreeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("academic_degree_id")
+                        .HasComment("Идентификатор академической степени");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AcademicDegreeId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("c_academic_degree_name")
-                        .HasComment("Название ученой степени (Кандидат наук, Доктор наук)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_academic_degree_name");
 
                     b.HasKey("AcademicDegreeId")
                         .HasName("pk_cd_academic_degree_academic_degree_id");
 
-                    b.ToTable("AcademicDegrees");
+                    b.ToTable("cd_academic_degree", (string)null);
                 });
 
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Department", b =>
@@ -53,19 +54,11 @@ namespace Petrova_Julia_KT_31.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
 
-                    b.Property<int>("HeadTeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HeadTeacherTeacherId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DepartmentId");
-
-                    b.HasIndex("HeadTeacherTeacherId");
 
                     b.ToTable("Departments");
                 });
@@ -74,139 +67,148 @@ namespace Petrova_Julia_KT_31.Migrations
                 {
                     b.Property<int>("DisciplineId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("discipline_id")
+                        .HasComment("Идентификатор дисциплины");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DisciplineId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
                         .HasColumnName("c_discipline_name")
                         .HasComment("Название дисциплины");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int")
+                        .HasColumnName("teacher_id")
+                        .HasComment("Идентификатор преподавателя");
 
                     b.HasKey("DisciplineId")
                         .HasName("pk_cd_discipline_discipline_id");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex(new[] { "TeacherId" }, "idx_cd_discipline_fk_teacher_id");
 
-                    b.ToTable("Disciplines");
+                    b.ToTable("cd_discipline", (string)null);
                 });
 
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Staff", b =>
                 {
                     b.Property<int>("StaffId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("staff_id")
+                        .HasComment("Идентификатор должности");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
                         .HasColumnName("c_staff_name")
-                        .HasComment("Название должности (Преподаватель, Доцент, Профессор)");
+                        .HasComment("Название должности");
 
                     b.HasKey("StaffId")
                         .HasName("pk_cd_staff_staff_id");
 
-                    b.ToTable("Staffers");
+                    b.ToTable("cd_staff", (string)null);
                 });
 
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Teacher", b =>
                 {
                     b.Property<int>("TeacherId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("teacher_id")
+                        .HasComment("Идентификатор преподавателя");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
 
-                    b.Property<int>("AcademicDegreeId")
-                        .HasColumnType("int");
+                    b.Property<int?>("AcademicDegreeId")
+                        .HasColumnType("int")
+                        .HasColumnName("academicdegree_id")
+                        .HasComment("Идентификатор ученой степени");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int")
+                        .HasColumnName("department_id")
+                        .HasComment("Идентификатор кафедры");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("c_teacher_firstname");
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_teacher_firstname")
+                        .HasComment("Имя преподавателя");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("c_teacher_lastname");
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_teacher_lastname")
+                        .HasComment("Фамилия преподавателя");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("c_teacher_middlename");
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_teacher_middlename")
+                        .HasComment("Отчество преподавателя");
 
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
+                    b.Property<int?>("StaffId")
+                        .HasColumnType("int")
+                        .HasColumnName("staff_id")
+                        .HasComment("Идентификатор должности");
+
+                    b.Property<int?>("WorkloadId")
+                        .HasColumnType("int")
+                        .HasColumnName("workload_id")
+                        .HasComment("Идентификатор нагрузки");
 
                     b.HasKey("TeacherId")
                         .HasName("pk_cd_teacher_teacher_id");
 
-                    b.HasIndex("AcademicDegreeId");
+                    b.HasIndex(new[] { "AcademicDegreeId" }, "idx_cd_teacher_fk_academicdegree_id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex(new[] { "DepartmentId" }, "idx_cd_teacher_fk_department_id");
 
-                    b.HasIndex("StaffId");
+                    b.HasIndex(new[] { "StaffId" }, "idx_cd_teacher_fk_staff_id");
 
-                    b.ToTable("Teachers");
+                    b.HasIndex(new[] { "WorkloadId" }, "idx_cd_teacher_fk_workload_id");
+
+                    b.ToTable("cd_teacher", (string)null);
                 });
 
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Workload", b =>
                 {
                     b.Property<int>("WorkloadId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("workload_id")
+                        .HasComment("Идентификатор нагрузки на преподавателя");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkloadId"));
 
-                    b.Property<int>("DisciplineId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Hours")
                         .HasColumnType("int")
-                        .HasColumnName("c_workload_hours")
-                        .HasComment("Количество часов нагрузки по дисциплине");
+                        .HasColumnName("c_hours")
+                        .HasComment("Количество часов");
 
                     b.HasKey("WorkloadId")
                         .HasName("pk_cd_workload_workload_id");
 
-                    b.HasIndex("DisciplineId");
-
-                    b.ToTable("Workloads");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Department", b =>
-                {
-                    b.HasOne("Petrova_Julia_KT_31.Models.Teacher", "HeadTeacher")
-                        .WithMany()
-                        .HasForeignKey("HeadTeacherTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HeadTeacher");
+                    b.ToTable("cd_workload", (string)null);
                 });
 
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Discipline", b =>
                 {
                     b.HasOne("Petrova_Julia_KT_31.Models.Teacher", "Teacher")
-                        .WithMany("Disciplines")
+                        .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_cd_discipline_teacher_id");
+                        .HasConstraintName("fk_teacher_id");
 
                     b.Navigation("Teacher");
                 });
@@ -214,68 +216,36 @@ namespace Petrova_Julia_KT_31.Migrations
             modelBuilder.Entity("Petrova_Julia_KT_31.Models.Teacher", b =>
                 {
                     b.HasOne("Petrova_Julia_KT_31.Models.AcademicDegree", "AcademicDegree")
-                        .WithMany("Teachers")
+                        .WithMany()
                         .HasForeignKey("AcademicDegreeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_cd_academic_degree_teacher_id");
+                        .HasConstraintName("fk_academicdegree_id");
 
                     b.HasOne("Petrova_Julia_KT_31.Models.Department", "Department")
-                        .WithMany("Teachers")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_cd_teacher_department_id");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_department_id");
 
                     b.HasOne("Petrova_Julia_KT_31.Models.Staff", "Staff")
-                        .WithMany("Teachers")
+                        .WithMany()
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_cd_staff_teacher_id");
+                        .HasConstraintName("fk_staff_id");
+
+                    b.HasOne("Petrova_Julia_KT_31.Models.Workload", "Workload")
+                        .WithMany()
+                        .HasForeignKey("WorkloadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_workload_id");
 
                     b.Navigation("AcademicDegree");
 
                     b.Navigation("Department");
 
                     b.Navigation("Staff");
-                });
 
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Workload", b =>
-                {
-                    b.HasOne("Petrova_Julia_KT_31.Models.Discipline", "Discipline")
-                        .WithMany("Workloads")
-                        .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_cd_workload_discipline_id");
-
-                    b.Navigation("Discipline");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.AcademicDegree", b =>
-                {
-                    b.Navigation("Teachers");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Department", b =>
-                {
-                    b.Navigation("Teachers");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Discipline", b =>
-                {
-                    b.Navigation("Workloads");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Staff", b =>
-                {
-                    b.Navigation("Teachers");
-                });
-
-            modelBuilder.Entity("Petrova_Julia_KT_31.Models.Teacher", b =>
-                {
-                    b.Navigation("Disciplines");
+                    b.Navigation("Workload");
                 });
 #pragma warning restore 612, 618
         }
